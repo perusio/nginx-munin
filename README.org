@@ -64,13 +64,12 @@
 
    Something like this for altering the URL:
 
-#begin_src :sh
-   [nginx_status]
-   env.url=http://hostname:8888/nginx-status nginx_status
 
-   [nginx_request]
-   env.url=http://hostname:8888/nginx-status nginx_status
-#end_src 
+   ~[nginx_status]
+    env.url=http://hostname:8888/nginx-status nginx_status~
+
+   ~[nginx_request]
+    env.url=http://hostname:8888/nginx-status nginx_status~
 
    Add =env.ua= for altering the User Agent.   
 

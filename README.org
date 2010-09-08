@@ -65,13 +65,17 @@
    Something like this for altering the URL:
 
 
-   =[nginx_status]=
-   ~env.url=http://hostname:8888/nginx-status nginx_status~
+   ~[nginx_status]
+    env.url=http://hostname:8888/nginx-status nginx_status~
 
-   =[nginx_request]=
-   ~env.url=http://hostname:8888/nginx-status nginx_status~
+   ~[nginx_request]
+    env.url=http://hostname:8888/nginx-status nginx_status~
 
    Add =env.ua= for altering the User Agent.   
 
    Don't forget to restart the munin-node daemon as described in step
    2 of the installation instructions above.
+
+   Note: the github handling of Org mode markup is *broken*. Therefore
+   the =[nginx_status]= and =[nginx_request]= lines are separate from
+   the lines specifying the environment variables.

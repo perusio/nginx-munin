@@ -1,9 +1,11 @@
 #!/usr/bin/perl -w
-# -*- cperl -*-
+# -*- mode: cperl; mode: autopair -*-
 # Magic markers:
 #%# family=auto
 #%# capabilities=autoconf
-# nginx_request --- Determine the current connection rate for Nginx.
+# nginx_request --- Determine the current connection rate for
+#                   nginx. Based on a nginx_request plugin by unknown
+#                   author.
 
 # Copyright (C) 2010 António P. P. Almeida <appa@perusio.net>
 
@@ -79,7 +81,7 @@ None known
 
 =head1 AUTHOR
 
-Unknown Mantained by António Almeida <appa@perusio.net>
+Unknown. Modified by António Almeida <appa@perusio.net>
 
 =head1 REPOSITORY
 
@@ -90,7 +92,6 @@ Source code at http://github.com/perusio/nginx-munin
 MIT
 
 =cut
-
 
 my $ret = undef;
 
@@ -130,13 +131,10 @@ if (exists $ARGV[0] and $ARGV[0] eq "autoconf" ) {
 
 ## Munin config method.
 if ( exists $ARGV[0] and $ARGV[0] eq "config" ) {
-  print "graph_title NGINX requests\n";
-  print "graph_args --base 1000\n";
+  print "graph_title nginx requests/second rate\n";
   print "graph_category nginx\n";
-  print "graph_vlabel Request per second\n";
-  print "request.label requests\n";
-  print "request.label req/sec\n";
-  print "request.type DERIVE\n";
+  print "graph_vlabel Request Rate\n";
+  print "request.label requests/second\n";
   print "request.min 0\n";
   print "request.draw LINE2\n";
 
@@ -150,7 +148,7 @@ $ua->agent($UA);
 my $response = $ua->request(HTTP::Request->new('GET',$URL));
 
 if ($response->content =~ /^\s+(\d+)\s+(\d+)\s+(\d+)/m) {
-  print "request.value $3\n";
+  printf("request.value %.2f\n", $3/$2);
 } else {
   print "request.value U\n";
 }

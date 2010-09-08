@@ -65,10 +65,10 @@
    Something like this for altering the URL:
 
 
-   ~[nginx_status]~
+   =[nginx_status]=
    ~env.url=http://hostname:8888/nginx-status nginx_status~
 
-   ~[nginx_request]~
+   =[nginx_request]=
    ~env.url=http://hostname:8888/nginx-status nginx_status~
 
    Add =env.ua= for altering the User Agent.   

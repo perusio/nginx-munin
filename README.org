@@ -16,7 +16,7 @@
 
   /connections initiated/, /connections handled/, /requests served/
 
-** nginx_request_connection
+** TODO nginx_connection_request
    
    Presents the number of requests served by connection handled by
    nginx. The requests-connection ratio handled by the server is the

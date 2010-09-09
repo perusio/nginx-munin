@@ -131,7 +131,7 @@ if (exists $ARGV[0] and $ARGV[0] eq "autoconf" ) {
 }
 
 ## Munin config method.
-if (exists $ARGV[0] and $ARGV[0] eq "config" ) {
+if (exists $ARGV[0] and $ARGV[0] eq "config") {
   print "graph_title NGINX status\n";
   print "graph_args --base 1000\n";
   print "graph_category nginx\n";

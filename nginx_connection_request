@@ -3,9 +3,8 @@
 # Magic markers:
 #%# family=auto
 #%# capabilities=autoconf
-# nginx_request --- Determine the current connection rate for
-#                   nginx. Based on a nginx_request plugin by unknown
-#                   author.
+# nginx_connection request --- Determine the requests/connection
+#                              served by nginx.
 
 # Copyright (C) 2010 António P. P. Almeida <appa@perusio.net>
 
@@ -35,7 +34,9 @@
 
 =head1 NAME
 
-nginx_request - Munin plugin to show number of requests/connection served by nginx.
+nginx_connection_request - Munin plugin to show number of
+requests/connection served by nginx.
+
 =encoding utf8
 
 =head1 APPLICABLE SYSTEMS
@@ -80,7 +81,7 @@ None known
 
 =head1 AUTHOR
 
-Unknown. Modified by António Almeida <appa@perusio.net>
+António Almeida <appa@perusio.net>
 
 =head1 REPOSITORY
 
@@ -92,7 +93,6 @@ MIT
 
 =cut
 
-
 my $ret = undef;
 
 if (! eval "require LWP::UserAgent;") {
@@ -101,7 +101,6 @@ if (! eval "require LWP::UserAgent;") {
 
 chomp(my $fqdn=`hostname -f`);
 
-
 ## Environment defined variables.
 ## The default URL is nginx_status if different set it in the environment.
 my $URL = exists $ENV{'url'} ? $ENV{'url'} : "http://$fqdn/nginx_status";
@@ -109,36 +108,33 @@ my $URL = exists $ENV{'url'} ? $ENV{'url'} : "http://$fqdn/nginx_status";
 ## set it in the environment.
 my $UA = exists $ENV{'ua'} ? $ENV{'ua'} : 'nginx-status-verifier/0.1';
 
-if (exists $ARGV[0] and $ARGV[0] eq "autoconf") {
+## Munin autoconf method.
+if (exists $ARGV[0] and $ARGV[0] eq "autoconf" ) {
   if ($ret) {
     print "no ($ret)\n";
     exit 1;
   }
-
   my $ua = LWP::UserAgent->new(timeout => 30);
   # Set the UA to something different from the libwww-perl.
   # That UA is blocked.
   $ua->agent($UA);
   my $response = $ua->request(HTTP::Request->new('GET',$URL));
 
-  unless ($response->is_success and $response->content =~ /server/im)
-    {
-      print "no (no nginx status on $URL)\n";
-      exit 1;
-    } else {
-      print "yes\n";
-      exit 0;
-    }
+  unless ($response->is_success and $response->content =~ /server/im) {
+    print "no (no nginx status on $URL)\n";
+    exit 1;
+  } else {
+    print "yes\n";
+    exit 0;
+  }
 }
 
 ## Munin config method.
-if (exists $ARGV[0] and $ARGV[0] eq "config") {
-  print "graph_title NGINX requests\n";
-  print "graph_args --base 1000\n";
+if ( exists $ARGV[0] and $ARGV[0] eq "config" ) {
+  print "graph_title nginx requests/second rate\n";
   print "graph_category nginx\n";
-  print "graph_vlabel Request per second\n";
-  print "request.label req/sec\n";
-  print "request.type DERIVE\n";
+  print "graph_vlabel Request Rate\n";
+  print "request.label requests/second\n";
   print "request.min 0\n";
   print "request.draw LINE2\n";
 
@@ -152,7 +148,7 @@ $ua->agent($UA);
 my $response = $ua->request(HTTP::Request->new('GET',$URL));
 
 if ($response->content =~ /^\s+(\d+)\s+(\d+)\s+(\d+)/m) {
-  print "request.value $3\n";
+  printf("request.value %.2f\n", $3/$2);
 } else {
   print "request.value U\n";
 }

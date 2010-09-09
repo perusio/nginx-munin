@@ -9,7 +9,23 @@
 
    Based on the one provided in the Debian [[http://packages.debian.org/squeeze/munin-node][munin-node]] package. Which
    is itself a modified version of the one available at the [[http://exchange.munin-monitoring.org][Munin Plugin
-   Exchange]].
+   Exchange]]. It shows the connection status for nginx. 
+
+   Presents the values returned by nginx, using the
+   [[wiki.nginx.org/NginxHttpStubStatusModule][http_stub_status]] module, are respectively, the number of:
+
+  /connections initiated/, /connections handled/, /requests served/
+
+** nginx_request_connection
+   
+   Presents the number of requests served by connection handled by
+   nginx. The requests-connection ratio handled by the server is the
+   ratio:
+
+   requests served / connections handled
+
+  This is implemented as a RRDtool datasource of type =GAUGE=, the
+  [[http://munin-monitoring.org/wiki/fieldname.type][default]] type for Munin.
 
 ** nginx_request
 
@@ -17,18 +33,8 @@
   is itself a modified version of the one available at the [[http://exchange.munin-monitoring.org][Munin Plugin
   Exchange]].
  
-  The original version computed *nonsensical* values. The values
-  returned by nginx, using the [[wiki.nginx.org/NginxHttpStubStatusModule][http_stub_status]] module, are
-  respectively, the number of:
-
-  /connections initiated/, /connections handled/, /requests served/
-
-  The connection rate handled by the server is the ratio:
-
-  requests served / connections handled
-
-  This is implemented as a RRDtool datasource of type =GAUGE=, the
-  [[http://munin-monitoring.org/wiki/fieldname.type][default]] type for Munin.
+  It uses a derivative (technically a finite difference) to compute
+  the connection rate value. 
 
 ** nginx_memory
 
@@ -44,6 +50,9 @@
 
    3. Done. You should now start to see a new section *nginx* in your
       Munin pages with the corresponding graphs.
+
+   4. All scripts have POD documentation. Issue =perldoc <script
+      name>= to read them.
 
 ** Environment Settings
 
@@ -68,6 +77,10 @@
    ~[nginx_status]
     env.url=http://hostname:8888/nginx-status nginx_status~
 
+
+   ~[nginx_connection_request]
+    env.url=http://hostname:8888/nginx-status nginx_status~
+
    ~[nginx_request]
     env.url=http://hostname:8888/nginx-status nginx_status~
 
@@ -77,5 +90,8 @@
    2 of the installation instructions above.
 
    Note: the github handling of Org mode markup is *broken*. Therefore
-   the =[nginx_status]= and =[nginx_request]= lines are separate from
-   the lines specifying the environment variables.
+   the =[nginx_status]= =[nginx_connection_request]= and
+   =[nginx_request]= lines are separate from the lines specifying the
+   environment variables.
+
+   It's not github's responsibility but rather a bug in [[http://orgmode.org/worg/org-tutorials/org-ruby.php][Org-Ruby]].

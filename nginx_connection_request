@@ -130,13 +130,13 @@ if (exists $ARGV[0] and $ARGV[0] eq "autoconf" ) {
 }
 
 ## Munin config method.
-if ( exists $ARGV[0] and $ARGV[0] eq "config" ) {
-  print "graph_title nginx requests/second rate\n";
+if (exists $ARGV[0] and $ARGV[0] eq "config") {
+  print "graph_title nginx requests/connection handled\n";
   print "graph_category nginx\n";
-  print "graph_vlabel Request Rate\n";
-  print "request.label requests/second\n";
-  print "request.min 0\n";
-  print "request.draw LINE2\n";
+  print "graph_vlabel Request/Connection\n";
+  print "connection_request.label requests/connection\n";
+  print "connection_request.min 0\n";
+  print "connection_request.draw LINE2\n";
 
   exit 0;
 }
@@ -148,7 +148,7 @@ $ua->agent($UA);
 my $response = $ua->request(HTTP::Request->new('GET',$URL));
 
 if ($response->content =~ /^\s+(\d+)\s+(\d+)\s+(\d+)/m) {
-  printf("request.value %.2f\n", $3/$2);
+  printf("connection_request.value %.2f\n", $3/$2);
 } else {
-  print "request.value U\n";
+  print "connection_request.value U\n";
 }

@@ -81,6 +81,6 @@ if (exists $ARGV[0] and $ARGV[0] eq "config") {
 
   exit 0;
 } else {
-  my $m = `ps u -p  \$(pidof nginx) | awk 'NR > 1 {nm += \$5} END {print nm*1024}'`;
+  my $m = `ps u -p  \`pidof nginx\` | awk 'NR > 1 {nm += \$5} END {print nm*1024}'`;
   print "ram.value $m";
 }

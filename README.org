@@ -46,7 +46,7 @@
 
    1. Copy all the scripts to =/etc/munin/plugins=.
 
-   2. Restart the munin-node daemon. =/etc/init.d/munin-node restart=.
+   2. Restart the munin-node daemon: =/etc/init.d/munin-node restart=.
 
    3. Done. You should now start to see a new section *nginx* in your
       Munin pages with the corresponding graphs.
@@ -76,7 +76,6 @@
 
    ~[nginx_status]
     env.url=http://hostname:8888/nginx-status nginx_status~
-
 
    ~[nginx_connection_request]
     env.url=http://hostname:8888/nginx-status nginx_status~

@@ -81,6 +81,17 @@ if (exists $ARGV[0] and $ARGV[0] eq "config") {
 
   exit 0;
 } else {
-  my $m = `ps u -p  \`pidof nginx\` | awk 'NR > 1 {nm += \$5} END {print nm*1024}'`;
+
+  ## Get the current OS name.
+  my $osname = $^O;
+
+  if ($osname eq 'freebsd') {   # FreeBSD
+    my $pid_nginx = "pgrep -d ' ' nginx";
+  } else {                      # Linux
+    my $pid_nginx = "pidof nginx";
+  }
+
+  my $m = `ps u -p \$(pgrep -d ' ' nginx) | awk 'NR > 1 {nm += \$5} END {print nm*1024}'`;
+
   print "ram.value $m";
 }

@@ -54,7 +54,7 @@ Any nginx host
 
 =head1 BUGS
 
-None known
+FreeBSD Security process in sysctl security.bsd.see_other_uids=0 and security.bsd.see_other_gids=0 error stop.
 
 =head1 AUTHOR
 

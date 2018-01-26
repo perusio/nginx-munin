@@ -76,7 +76,7 @@ if (exists $ARGV[0] and $ARGV[0] eq "autoconf") {
   ## Return yes as long as nginx is installed
 
   my $nginx = `which nginx >/dev/null 2>/dev/null`;
-  if ( $nginx eq "" ) {
+  if ( $? != 0 ) {
     print "no\n";
   } else {
     print "yes\n";

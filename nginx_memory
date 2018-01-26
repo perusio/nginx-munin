@@ -71,8 +71,19 @@ MIT
 
 =cut
 
-## Munin config method.
-if (exists $ARGV[0] and $ARGV[0] eq "config") {
+## Plugin
+if (exists $ARGV[0] and $ARGV[0] eq "autoconf") {
+  ## Return yes as long as nginx is installed
+
+  my $nginx = `which nginx >/dev/null 2>/dev/null`;
+  if ( $nginx eq "" ) {
+    print "no\n";
+  } else {
+    print "yes\n";
+  }
+} elsif (exists $ARGV[0] and $ARGV[0] eq "config") {
+  ## Configure the plugin
+
   print "graph_title nginx RAM usage\n";
   print "graph_vlabel RAM\n";
   print "graph_category nginx\n";
@@ -81,15 +92,7 @@ if (exists $ARGV[0] and $ARGV[0] eq "config") {
 
   exit 0;
 } else {
-
-  ## Get the current OS name.
-  my $osname = $^O;
-
-  if ($osname eq 'freebsd') {   # FreeBSD
-    my $pid_nginx = "pgrep -d ' ' nginx";
-  } else {                      # Linux
-    my $pid_nginx = "pidof nginx";
-  }
+  ## Normal operation
 
   my $m = `ps u -p \$(pgrep -d ' ' nginx) | awk 'NR > 1 {nm += \$5} END {print nm*1024}'`;
 
